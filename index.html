@@ -4,108 +4,183 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AR Face Recognition Video Player</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.18.0/dist/tf.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/blazeface@0.0.7/dist/blazeface.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection@0.0.1/dist/face-landmarks-detection.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <style>
       :root {
-        --primary: #6366f1;
-        --primary-dark: #4f46e5;
-        --primary-light: #8b5cf6;
-        --secondary: #10b981;
+        /* Light Theme Variables */
+        --primary: #3b82f6;
+        --primary-dark: #2563eb;
+        --primary-light: #60a5fa;
+        --secondary: #8b5cf6;
+        --success: #10b981;
         --danger: #ef4444;
         --warning: #f59e0b;
-        --bg-dark: #0f172a;
-        --bg-card: #1e293b;
-        --bg-darker: #0b0f1a;
-        --text-light: #f1f5f9;
+        --info: #06b6d4;
+
+        --bg-primary: #ffffff;
+        --bg-secondary: #f8fafc;
+        --bg-tertiary: #f1f5f9;
+        --bg-card: #ffffff;
+
+        --text-primary: #1e293b;
+        --text-secondary: #64748b;
         --text-muted: #94a3b8;
-        --border: #334155;
+
+        --border: #e2e8f0;
+        --border-light: #f1f5f9;
+        --shadow: rgba(0, 0, 0, 0.1);
+        --shadow-lg: rgba(0, 0, 0, 0.15);
+
+        --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+
         --radius: 12px;
         --radius-sm: 8px;
+        --radius-lg: 16px;
+      }
+
+      [data-theme="dark"] {
+        /* Dark Theme Variables */
+        --primary: #60a5fa;
+        --primary-dark: #3b82f6;
+        --primary-light: #93c5fd;
+        --secondary: #a78bfa;
+        --success: #34d399;
+        --danger: #f87171;
+        --warning: #fbbf24;
+        --info: #22d3ee;
+
+        --bg-primary: #0f172a;
+        --bg-secondary: #1e293b;
+        --bg-tertiary: #334155;
+        --bg-card: #1e293b;
+
+        --text-primary: #f1f5f9;
+        --text-secondary: #cbd5e1;
+        --text-muted: #94a3b8;
+
+        --border: #334155;
+        --border-light: #475569;
+        --shadow: rgba(0, 0, 0, 0.3);
+        --shadow-lg: rgba(0, 0, 0, 0.5);
+
+        --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        --gradient-secondary: linear-gradient(135deg, #f472b6 0%, #fb7185 100%);
       }
 
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: "Segoe UI", system-ui, sans-serif;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
       }
 
       body {
-        background: var(--bg-dark);
-        color: var(--text-light);
+        background: var(--bg-primary);
+        color: var(--text-primary);
         line-height: 1.6;
+        transition: all 0.3s ease;
         min-height: 100vh;
+      }
+
+      .app-container {
+        max-width: 1400px;
+        margin: 0 auto;
         padding: 20px;
       }
 
-      .container {
-        max-width: 1400px;
-        margin: 0 auto;
-      }
-
-      header {
-        text-align: center;
+      /* Header */
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         margin-bottom: 30px;
-        padding: 20px 0;
+        padding-bottom: 20px;
         border-bottom: 1px solid var(--border);
       }
 
       .logo {
         display: flex;
         align-items: center;
-        justify-content: center;
-        gap: 15px;
-        margin-bottom: 10px;
+        gap: 12px;
       }
 
       .logo-icon {
-        width: 50px;
-        height: 50px;
-        background: linear-gradient(
-          135deg,
-          var(--primary),
-          var(--primary-light)
-        );
-        border-radius: 12px;
+        width: 40px;
+        height: 40px;
+        background: var(--gradient-primary);
+        border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 24px;
         color: white;
+        font-size: 20px;
       }
 
-      h1 {
-        font-size: 2.5rem;
-        background: linear-gradient(
-          135deg,
-          var(--primary),
-          var(--primary-light)
-        );
+      .logo-text h1 {
+        font-size: 24px;
+        font-weight: 700;
+        background: var(--gradient-primary);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        margin-bottom: 10px;
+        margin-bottom: 4px;
       }
 
-      .subtitle {
-        color: var(--text-muted);
-        font-size: 1.1rem;
-        max-width: 600px;
-        margin: 0 auto;
+      .logo-text p {
+        font-size: 14px;
+        color: var(--text-secondary);
       }
 
+      .theme-toggle {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 50px;
+        padding: 8px;
+        display: flex;
+        gap: 4px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .theme-toggle:hover {
+        box-shadow: 0 4px 12px var(--shadow);
+      }
+
+      .theme-btn {
+        padding: 8px 16px;
+        border-radius: 50px;
+        border: none;
+        background: transparent;
+        color: var(--text-secondary);
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .theme-btn.active {
+        background: var(--primary);
+        color: white;
+        box-shadow: 0 2px 8px var(--shadow);
+      }
+
+      /* Main Layout */
       .main-content {
         display: grid;
         grid-template-columns: 1fr 400px;
-        gap: 25px;
+        gap: 24px;
       }
 
+      /* Video Section */
       .video-section {
         background: var(--bg-card);
-        border-radius: var(--radius);
+        border-radius: var(--radius-lg);
         padding: 20px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 4px 20px var(--shadow);
         border: 1px solid var(--border);
       }
 
@@ -114,11 +189,11 @@
         width: 100%;
         border-radius: var(--radius);
         overflow: hidden;
-        background: var(--bg-darker);
+        background: var(--bg-primary);
         aspect-ratio: 16/9;
       }
 
-      #videoElement {
+      #inputVideo {
         width: 100%;
         height: 100%;
         object-fit: cover;
@@ -140,14 +215,14 @@
         position: absolute;
         bottom: 20px;
         right: 20px;
-        width: 250px;
-        height: 160px;
-        background: var(--bg-darker);
+        width: 220px;
+        height: 140px;
+        background: var(--bg-primary);
         border-radius: var(--radius);
         overflow: hidden;
         display: none;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        border: 3px solid var(--primary);
+        box-shadow: 0 8px 25px var(--shadow-lg);
+        border: 2px solid var(--primary);
         z-index: 10;
       }
 
@@ -159,8 +234,8 @@
 
       .recognition-info {
         margin-top: 20px;
-        padding: 20px;
-        background: var(--bg-darker);
+        padding: 16px;
+        background: var(--bg-secondary);
         border-radius: var(--radius);
         border-left: 4px solid var(--primary);
       }
@@ -168,32 +243,33 @@
       .info-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
+        gap: 16px;
       }
 
       .info-item {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 4px;
       }
 
       .info-label {
-        font-size: 14px;
-        color: var(--text-muted);
+        font-size: 12px;
+        color: var(--text-secondary);
         font-weight: 500;
       }
 
       .info-value {
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 600;
-        color: var(--text-light);
+        color: var(--text-primary);
       }
 
+      /* Controls Section */
       .controls-section {
         background: var(--bg-card);
-        border-radius: var(--radius);
-        padding: 25px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        border-radius: var(--radius-lg);
+        padding: 24px;
+        box-shadow: 0 4px 20px var(--shadow);
         border: 1px solid var(--border);
         height: fit-content;
       }
@@ -201,57 +277,58 @@
       .section-title {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 10px;
         margin-bottom: 20px;
-        padding-bottom: 15px;
+        padding-bottom: 12px;
         border-bottom: 1px solid var(--border);
       }
 
       .section-title i {
         color: var(--primary);
-        font-size: 20px;
+        font-size: 18px;
       }
 
       .section-title h2 {
-        font-size: 20px;
+        font-size: 18px;
         font-weight: 600;
-        color: var(--text-light);
+        color: var(--text-primary);
       }
 
+      /* Form Elements */
       .form-group {
         margin-bottom: 20px;
       }
 
       .form-label {
         display: block;
-        margin-bottom: 10px;
-        font-size: 16px;
+        margin-bottom: 8px;
+        font-size: 14px;
         font-weight: 500;
-        color: var(--text-light);
+        color: var(--text-primary);
       }
 
       .form-input {
         width: 100%;
-        padding: 14px 16px;
+        padding: 12px 16px;
         border-radius: var(--radius-sm);
         border: 1px solid var(--border);
-        background: var(--bg-darker);
-        color: var(--text-light);
-        font-size: 16px;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font-size: 14px;
         transition: all 0.3s ease;
       }
 
       .form-input:focus {
         outline: none;
         border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
       }
 
       .file-upload {
         position: relative;
         border: 2px dashed var(--border);
         border-radius: var(--radius-sm);
-        padding: 25px;
+        padding: 20px;
         text-align: center;
         transition: all 0.3s ease;
         cursor: pointer;
@@ -259,23 +336,23 @@
 
       .file-upload:hover {
         border-color: var(--primary);
-        background: rgba(99, 102, 241, 0.05);
+        background: var(--bg-secondary);
       }
 
       .file-upload i {
-        font-size: 32px;
+        font-size: 24px;
         color: var(--text-muted);
-        margin-bottom: 12px;
-      }
-
-      .file-upload-text {
-        font-size: 16px;
-        color: var(--text-light);
         margin-bottom: 8px;
       }
 
-      .file-upload-hint {
+      .file-upload-text {
         font-size: 14px;
+        color: var(--text-secondary);
+        margin-bottom: 4px;
+      }
+
+      .file-upload-hint {
+        font-size: 12px;
         color: var(--text-muted);
       }
 
@@ -290,20 +367,21 @@
       }
 
       .selected-files {
-        margin-top: 10px;
-        font-size: 14px;
+        margin-top: 8px;
+        font-size: 12px;
         color: var(--primary);
       }
 
+      /* Buttons */
       .btn {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 10px;
-        padding: 14px 24px;
+        gap: 8px;
+        padding: 12px 20px;
         border-radius: var(--radius-sm);
         border: none;
-        font-size: 16px;
+        font-size: 14px;
         font-weight: 500;
         cursor: pointer;
         transition: all 0.3s ease;
@@ -318,18 +396,18 @@
       .btn-primary:hover {
         background: var(--primary-dark);
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        box-shadow: 0 4px 12px var(--shadow);
       }
 
       .btn-success {
-        background: var(--secondary);
+        background: var(--success);
         color: white;
       }
 
       .btn-success:hover {
         background: #0da271;
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        box-shadow: 0 4px 12px var(--shadow);
       }
 
       .btn-danger {
@@ -340,23 +418,23 @@
       .btn-danger:hover {
         background: #dc2626;
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+        box-shadow: 0 4px 12px var(--shadow);
       }
 
       .btn-outline {
         background: transparent;
-        color: var(--text-light);
+        color: var(--text-primary);
         border: 1px solid var(--border);
       }
 
       .btn-outline:hover {
-        background: var(--bg-darker);
+        background: var(--bg-secondary);
         border-color: var(--primary);
       }
 
       .btn-sm {
-        padding: 10px 16px;
-        font-size: 14px;
+        padding: 8px 12px;
+        font-size: 12px;
       }
 
       .btn-full {
@@ -365,88 +443,84 @@
 
       .btn-group {
         display: flex;
-        gap: 15px;
-        margin-top: 25px;
+        gap: 12px;
+        margin-top: 20px;
       }
 
+      /* People List */
       .people-list {
         margin-top: 20px;
-        max-height: 350px;
+        max-height: 300px;
         overflow-y: auto;
       }
 
       .person-card {
-        background: var(--bg-darker);
+        background: var(--bg-secondary);
         border-radius: var(--radius);
-        padding: 18px;
-        margin-bottom: 15px;
+        padding: 16px;
+        margin-bottom: 12px;
         border: 1px solid var(--border);
         transition: all 0.3s ease;
       }
 
       .person-card:hover {
         border-color: var(--primary);
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 4px 12px var(--shadow);
       }
 
       .person-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 12px;
+        margin-bottom: 8px;
       }
 
       .person-name {
         font-weight: 600;
-        color: var(--text-light);
-        font-size: 18px;
+        color: var(--text-primary);
       }
 
       .person-samples {
-        font-size: 14px;
+        font-size: 12px;
         color: var(--text-muted);
       }
 
       .person-actions {
         display: flex;
-        gap: 10px;
+        gap: 8px;
       }
 
       .empty-state {
         text-align: center;
-        padding: 50px 25px;
+        padding: 40px 20px;
         color: var(--text-muted);
       }
 
       .empty-state i {
-        font-size: 56px;
-        margin-bottom: 20px;
+        font-size: 48px;
+        margin-bottom: 16px;
         opacity: 0.5;
       }
 
-      .empty-state-text {
-        font-size: 18px;
-        margin-bottom: 10px;
-      }
-
+      /* Model Loading */
       .model-loading {
-        background: var(--bg-darker);
+        background: var(--bg-secondary);
         border-radius: var(--radius);
-        padding: 25px;
-        margin-bottom: 25px;
+        padding: 20px;
+        margin-bottom: 20px;
       }
 
       .loading-header {
         display: flex;
-        justify-content: space-between;
+        justify-content: between;
         align-items: center;
-        margin-bottom: 15px;
+        margin-bottom: 12px;
       }
 
       .progress-bar {
-        height: 8px;
+        height: 6px;
         background: var(--border);
-        border-radius: 4px;
+        border-radius: 3px;
         overflow: hidden;
       }
 
@@ -458,27 +532,28 @@
       }
 
       .loading-status {
-        font-size: 14px;
+        font-size: 12px;
         color: var(--text-muted);
-        margin-top: 12px;
+        margin-top: 8px;
       }
 
+      /* Alerts */
       .alert-container {
         position: fixed;
         top: 20px;
         right: 20px;
         z-index: 1000;
-        max-width: 400px;
+        max-width: 350px;
       }
 
       .alert {
-        padding: 18px;
+        padding: 16px;
         border-radius: var(--radius);
-        margin-bottom: 15px;
+        margin-bottom: 12px;
         display: flex;
         align-items: center;
-        gap: 15px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        gap: 12px;
+        box-shadow: 0 4px 20px var(--shadow-lg);
         transform: translateX(400px);
         transition: transform 0.3s ease;
         border-left: 4px solid;
@@ -490,34 +565,34 @@
 
       .alert-success {
         background: var(--bg-card);
-        border-left-color: var(--secondary);
-        color: var(--text-light);
+        border-left-color: var(--success);
+        color: var(--text-primary);
       }
 
       .alert-error {
         background: var(--bg-card);
         border-left-color: var(--danger);
-        color: var(--text-light);
+        color: var(--text-primary);
       }
 
       .alert-warning {
         background: var(--bg-card);
         border-left-color: var(--warning);
-        color: var(--text-light);
+        color: var(--text-primary);
       }
 
       .alert-info {
         background: var(--bg-card);
-        border-left-color: var(--primary);
-        color: var(--text-light);
+        border-left-color: var(--info);
+        color: var(--text-primary);
       }
 
       .alert-icon {
-        font-size: 24px;
+        font-size: 20px;
       }
 
       .alert-success .alert-icon {
-        color: var(--secondary);
+        color: var(--success);
       }
       .alert-error .alert-icon {
         color: var(--danger);
@@ -526,7 +601,7 @@
         color: var(--warning);
       }
       .alert-info .alert-icon {
-        color: var(--primary);
+        color: var(--info);
       }
 
       .alert-content {
@@ -535,15 +610,15 @@
 
       .alert-title {
         font-weight: 600;
-        margin-bottom: 6px;
-        font-size: 16px;
+        margin-bottom: 4px;
       }
 
       .alert-message {
         font-size: 14px;
-        color: var(--text-muted);
+        color: var(--text-secondary);
       }
 
+      /* Responsive */
       @media (max-width: 1024px) {
         .main-content {
           grid-template-columns: 1fr;
@@ -555,12 +630,14 @@
       }
 
       @media (max-width: 768px) {
-        body {
-          padding: 15px;
+        .app-container {
+          padding: 16px;
         }
 
-        h1 {
-          font-size: 2rem;
+        .header {
+          flex-direction: column;
+          gap: 16px;
+          align-items: flex-start;
         }
 
         .btn-group {
@@ -568,26 +645,33 @@
         }
 
         .video-overlay {
-          width: 200px;
-          height: 130px;
+          width: 180px;
+          height: 120px;
         }
       }
     </style>
   </head>
   <body>
-    <div class="container">
+    <div class="app-container">
       <!-- Header -->
-      <header>
+      <header class="header">
         <div class="logo">
           <div class="logo-icon">
             <i class="fas fa-robot"></i>
           </div>
-          <h1>AR Face Recognition Video Player</h1>
+          <div class="logo-text">
+            <h1>AR Face Recognition</h1>
+            <p>Real-time face detection with video playback</p>
+          </div>
         </div>
-        <p class="subtitle">
-          Real-time face detection with personalized video playback using your
-          device camera
-        </p>
+        <div class="theme-toggle">
+          <button class="theme-btn active" data-theme="light">
+            <i class="fas fa-sun"></i> Light
+          </button>
+          <button class="theme-btn" data-theme="dark">
+            <i class="fas fa-moon"></i> Dark
+          </button>
+        </div>
       </header>
 
       <!-- Main Content -->
@@ -595,8 +679,9 @@
         <!-- Video Section -->
         <main class="video-section">
           <div class="video-container">
-            <video id="videoElement" autoplay muted playsinline></video>
+            <video id="inputVideo" autoplay muted playsinline></video>
             <canvas id="overlay"></canvas>
+
             <div class="video-overlay" id="personVideoWrap">
               <video id="personVideo" playsinline controls></video>
             </div>
@@ -631,9 +716,7 @@
             <div class="progress-bar">
               <div class="progress-fill" id="modelProgressBar"></div>
             </div>
-            <div class="loading-status" id="modelStatus">
-              Initializing TensorFlow.js...
-            </div>
+            <div class="loading-status" id="modelStatus">Initializing...</div>
           </div>
 
           <!-- Add Person Form -->
@@ -643,25 +726,25 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label">Person Name</label>
+            <label for="personName">Person name</label>
             <input
+              id="personName"
+              placeholder="e.g. Alice"
               type="text"
               class="form-input"
-              id="personName"
-              placeholder="Enter person's name"
             />
           </div>
 
           <div class="form-group">
-            <label class="form-label">Training Images</label>
+            <label>Upload sample images (1-5) for this person</label>
             <div class="file-upload" id="personImagesUpload">
               <i class="fas fa-cloud-upload-alt"></i>
-              <div class="file-upload-text">Select 1-5 face images</div>
+              <div class="file-upload-text">Select images...</div>
               <div class="file-upload-hint">JPEG, PNG, WebP supported</div>
               <input
+                id="personImages"
                 type="file"
                 class="file-input"
-                id="personImages"
                 accept="image/*"
                 multiple
               />
@@ -672,25 +755,22 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label">Associated Video</label>
+            <label for="personVideoUrl">Attach video (URL or upload)</label>
             <input
+              id="personVideoUrl"
               type="url"
               class="form-input"
-              id="personVideoUrl"
-              placeholder="Video URL (optional)"
+              placeholder="https://example.com/video.mp4"
             />
-            <div
-              class="file-upload"
-              id="personVideoUpload"
-              style="margin-top: 12px"
-            >
+            <div class="file-upload-hint">Or upload a video file:</div>
+            <div class="file-upload" id="personVideoUpload">
               <i class="fas fa-video"></i>
-              <div class="file-upload-text">Or upload video file</div>
+              <div class="file-upload-text">Select video...</div>
               <div class="file-upload-hint">MP4, WebM supported</div>
               <input
+                id="personVideoFile"
                 type="file"
                 class="file-input"
-                id="personVideoFile"
                 accept="video/*"
               />
             </div>
@@ -699,7 +779,7 @@
             </div>
           </div>
 
-          <button class="btn btn-success btn-full" id="addPersonBtn">
+          <button id="addPersonBtn" class="btn btn-success btn-full">
             <i class="fas fa-plus-circle"></i> Add Person
           </button>
 
@@ -712,7 +792,7 @@
           <div class="people-list" id="peopleList">
             <div class="empty-state">
               <i class="fas fa-user-friends"></i>
-              <div class="empty-state-text">No people added yet</div>
+              <div>No people added yet</div>
               <div class="file-upload-hint">
                 Add people to enable recognition
               </div>
@@ -726,23 +806,31 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label">Recognition Threshold</label>
-            <select class="form-input" id="threshold">
-              <option value="0.4">0.4 (Strict)</option>
-              <option value="0.5">0.5 (Moderate)</option>
-              <option value="0.6" selected>0.6 (Balanced)</option>
-              <option value="0.7">0.7 (Lenient)</option>
+            <label for="threshold">Recognition threshold</label>
+            <select id="threshold" class="form-input">
+              <option value="0.4">0.4 (strict)</option>
+              <option value="0.5">0.5 (moderate)</option>
+              <option value="0.6" selected>0.6 (default)</option>
+              <option value="0.7">0.7 (lenient)</option>
             </select>
             <div class="file-upload-hint">Lower values = stricter matching</div>
           </div>
 
           <div class="btn-group">
-            <button class="btn btn-primary" id="startBtn">
+            <button id="startBtn" class="btn btn-primary">
               <i class="fas fa-play"></i> Start Recognition
             </button>
-            <button class="btn btn-danger" id="stopBtn" style="display: none">
+            <button id="stopBtn" class="btn btn-danger" style="display: none">
               <i class="fas fa-stop"></i> Stop
             </button>
+          </div>
+
+          <div
+            class="status"
+            id="status"
+            style="margin-top: 16px; font-size: 14px; color: var(--text-muted)"
+          >
+            Click "Start Recognition" to begin.
           </div>
         </aside>
       </div>
@@ -752,10 +840,29 @@
     <div class="alert-container" id="alertContainer"></div>
 
     <script>
-      // Font Awesome icons (using a CDN)
-      const faScript = document.createElement("script");
-      faScript.src = "https://kit.fontawesome.com/a076d05399.js";
-      document.head.appendChild(faScript);
+      // Theme Management
+      const themeToggle = document.querySelector(".theme-toggle");
+      const themeButtons = document.querySelectorAll(".theme-btn");
+      const body = document.body;
+
+      // Set initial theme
+      const savedTheme = localStorage.getItem("theme") || "light";
+      setTheme(savedTheme);
+
+      themeButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const theme = btn.dataset.theme;
+          setTheme(theme);
+          localStorage.setItem("theme", theme);
+        });
+      });
+
+      function setTheme(theme) {
+        body.setAttribute("data-theme", theme);
+        themeButtons.forEach((btn) => {
+          btn.classList.toggle("active", btn.dataset.theme === theme);
+        });
+      }
 
       // Alert System
       function showAlert(message, type = "info", title = "", duration = 4000) {
@@ -799,12 +906,11 @@
           detectionInterval: 120,
           modelsLoaded: false,
           cameraActive: false,
-          faceDetectionModel: null,
         };
 
         // Elements
         const elements = {
-          videoElement: document.getElementById("videoElement"),
+          inputVideo: document.getElementById("inputVideo"),
           overlay: document.getElementById("overlay"),
           personVideoWrap: document.getElementById("personVideoWrap"),
           personVideo: document.getElementById("personVideo"),
@@ -828,6 +934,7 @@
           modelProgressBar: document.getElementById("modelProgressBar"),
           modelProgressText: document.getElementById("modelProgressText"),
           modelStatus: document.getElementById("modelStatus"),
+          status: document.getElementById("status"),
         };
 
         const ctx = elements.overlay.getContext("2d");
@@ -866,12 +973,12 @@
               upload.addEventListener("dragover", (e) => {
                 e.preventDefault();
                 upload.style.borderColor = "var(--primary)";
-                upload.style.background = "rgba(99, 102, 241, 0.05)";
+                upload.style.background = "var(--bg-secondary)";
               });
 
               upload.addEventListener("dragleave", () => {
                 upload.style.borderColor = "var(--border)";
-                upload.style.background = "transparent";
+                upload.style.background = "";
               });
             }
           );
@@ -1026,10 +1133,10 @@
           elements.startBtn.style.display = "inline-block";
           hidePersonVideo();
 
-          const stream = elements.videoElement.srcObject;
+          const stream = elements.inputVideo.srcObject;
           if (stream) {
             stream.getTracks().forEach((track) => track.stop());
-            elements.videoElement.srcObject = null;
+            elements.inputVideo.srcObject = null;
           }
 
           ctx.clearRect(0, 0, elements.overlay.width, elements.overlay.height);
@@ -1043,17 +1150,17 @@
         async function mainLoop() {
           if (!state.running) return;
 
-          if (elements.videoElement.readyState < 2) {
+          if (elements.inputVideo.readyState < 2) {
             requestAnimationFrame(mainLoop);
             return;
           }
 
           if (
-            elements.overlay.width !== elements.videoElement.videoWidth ||
-            elements.overlay.height !== elements.videoElement.videoHeight
+            elements.overlay.width !== elements.inputVideo.videoWidth ||
+            elements.overlay.height !== elements.inputVideo.videoHeight
           ) {
-            elements.overlay.width = elements.videoElement.videoWidth;
-            elements.overlay.height = elements.videoElement.videoHeight;
+            elements.overlay.width = elements.inputVideo.videoWidth;
+            elements.overlay.height = elements.inputVideo.videoHeight;
           }
 
           try {
@@ -1145,7 +1252,7 @@
               : "No images selected";
 
           if (count > 0) {
-            elements.personImagesUpload.style.borderColor = "var(--secondary)";
+            elements.personImagesUpload.style.borderColor = "var(--success)";
           }
         }
 
@@ -1153,7 +1260,7 @@
           const files = elements.personVideoFile.files;
           if (files.length > 0) {
             elements.selectedVideoText.textContent = files[0].name;
-            elements.personVideoUpload.style.borderColor = "var(--secondary)";
+            elements.personVideoUpload.style.borderColor = "var(--success)";
           } else {
             elements.selectedVideoText.textContent = "No video selected";
             elements.personVideoUpload.style.borderColor = "var(--border)";
@@ -1184,11 +1291,11 @@
               video: { facingMode: "user" },
               audio: false,
             });
-            elements.videoElement.srcObject = stream;
-            await elements.videoElement.play();
+            elements.inputVideo.srcObject = stream;
+            await elements.inputVideo.play();
 
-            elements.overlay.width = elements.videoElement.videoWidth;
-            elements.overlay.height = elements.videoElement.videoHeight;
+            elements.overlay.width = elements.inputVideo.videoWidth;
+            elements.overlay.height = elements.inputVideo.videoHeight;
             state.cameraActive = true;
 
             showAlert(
@@ -1283,7 +1390,7 @@
             peopleList.innerHTML = `
                         <div class="empty-state">
                             <i class="fas fa-user-friends"></i>
-                            <div class="empty-state-text">No people added yet</div>
+                            <div>No people added yet</div>
                             <div class="file-upload-hint">Add people to enable recognition</div>
                         </div>
                     `;
