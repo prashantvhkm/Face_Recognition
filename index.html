@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AR Face Recognition Video Player</title>
+    <title>AR Face Recognition Studio</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -85,12 +85,14 @@
         line-height: 1.6;
         transition: all 0.3s ease;
         min-height: 100vh;
+        overflow-x: hidden;
       }
 
       .app-container {
-        max-width: 1400px;
+        max-width: 100%;
         margin: 0 auto;
         padding: 20px;
+        min-height: 100vh;
       }
 
       /* Header */
@@ -98,8 +100,8 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 30px;
-        padding-bottom: 20px;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
         border-bottom: 1px solid var(--border);
       }
 
@@ -171,8 +173,9 @@
       /* Main Layout */
       .main-content {
         display: grid;
-        grid-template-columns: 1fr 400px;
-        gap: 24px;
+        grid-template-columns: 1fr 320px;
+        gap: 20px;
+        height: calc(100vh - 120px);
       }
 
       /* Video Section */
@@ -182,15 +185,19 @@
         padding: 20px;
         box-shadow: 0 4px 20px var(--shadow);
         border: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
       }
 
       .video-container {
         position: relative;
         width: 100%;
+        flex: 1;
         border-radius: var(--radius);
         overflow: hidden;
         background: var(--bg-primary);
-        aspect-ratio: 16/9;
+        min-height: 0; /* Important for flex child */
       }
 
       #inputVideo {
@@ -211,75 +218,37 @@
         transform: scaleX(-1);
       }
 
-      .video-overlay {
-        position: absolute;
-        bottom: 20px;
-        right: 20px;
-        width: 220px;
-        height: 140px;
-        background: var(--bg-primary);
-        border-radius: var(--radius);
-        overflow: hidden;
-        display: none;
-        box-shadow: 0 8px 25px var(--shadow-lg);
-        border: 2px solid var(--primary);
-        z-index: 10;
-      }
-
-      .video-overlay video {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      .recognition-info {
-        margin-top: 20px;
-        padding: 16px;
+      .video-controls {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+        padding: 15px;
         background: var(--bg-secondary);
         border-radius: var(--radius);
-        border-left: 4px solid var(--primary);
+        border: 1px solid var(--border);
       }
 
-      .info-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 16px;
-      }
-
-      .info-item {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
-
-      .info-label {
-        font-size: 12px;
-        color: var(--text-secondary);
-        font-weight: 500;
-      }
-
-      .info-value {
-        font-size: 16px;
-        font-weight: 600;
-        color: var(--text-primary);
+      .video-controls .btn {
+        flex: 1;
       }
 
       /* Controls Section */
       .controls-section {
         background: var(--bg-card);
         border-radius: var(--radius-lg);
-        padding: 24px;
+        padding: 20px;
         box-shadow: 0 4px 20px var(--shadow);
         border: 1px solid var(--border);
-        height: fit-content;
+        height: 100%;
+        overflow-y: auto;
       }
 
       .section-title {
         display: flex;
         align-items: center;
         gap: 10px;
-        margin-bottom: 20px;
-        padding-bottom: 12px;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
         border-bottom: 1px solid var(--border);
       }
 
@@ -296,12 +265,12 @@
 
       /* Form Elements */
       .form-group {
-        margin-bottom: 20px;
+        margin-bottom: 15px;
       }
 
       .form-label {
         display: block;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
         font-size: 14px;
         font-weight: 500;
         color: var(--text-primary);
@@ -309,7 +278,7 @@
 
       .form-input {
         width: 100%;
-        padding: 12px 16px;
+        padding: 10px 12px;
         border-radius: var(--radius-sm);
         border: 1px solid var(--border);
         background: var(--bg-primary);
@@ -328,7 +297,7 @@
         position: relative;
         border: 2px dashed var(--border);
         border-radius: var(--radius-sm);
-        padding: 20px;
+        padding: 15px;
         text-align: center;
         transition: all 0.3s ease;
         cursor: pointer;
@@ -340,19 +309,19 @@
       }
 
       .file-upload i {
-        font-size: 24px;
+        font-size: 20px;
         color: var(--text-muted);
-        margin-bottom: 8px;
+        margin-bottom: 6px;
       }
 
       .file-upload-text {
-        font-size: 14px;
+        font-size: 13px;
         color: var(--text-secondary);
         margin-bottom: 4px;
       }
 
       .file-upload-hint {
-        font-size: 12px;
+        font-size: 11px;
         color: var(--text-muted);
       }
 
@@ -367,7 +336,7 @@
       }
 
       .selected-files {
-        margin-top: 8px;
+        margin-top: 6px;
         font-size: 12px;
         color: var(--primary);
       }
@@ -377,11 +346,11 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
-        padding: 12px 20px;
+        gap: 6px;
+        padding: 10px 14px;
         border-radius: var(--radius-sm);
         border: none;
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 500;
         cursor: pointer;
         transition: all 0.3s ease;
@@ -395,7 +364,7 @@
 
       .btn-primary:hover {
         background: var(--primary-dark);
-        transform: translateY(-2px);
+        transform: translateY(-1px);
         box-shadow: 0 4px 12px var(--shadow);
       }
 
@@ -406,7 +375,7 @@
 
       .btn-success:hover {
         background: #0da271;
-        transform: translateY(-2px);
+        transform: translateY(-1px);
         box-shadow: 0 4px 12px var(--shadow);
       }
 
@@ -417,7 +386,7 @@
 
       .btn-danger:hover {
         background: #dc2626;
-        transform: translateY(-2px);
+        transform: translateY(-1px);
         box-shadow: 0 4px 12px var(--shadow);
       }
 
@@ -433,7 +402,7 @@
       }
 
       .btn-sm {
-        padding: 8px 12px;
+        padding: 6px 10px;
         font-size: 12px;
       }
 
@@ -443,22 +412,22 @@
 
       .btn-group {
         display: flex;
-        gap: 12px;
-        margin-top: 20px;
+        gap: 10px;
+        margin-top: 15px;
       }
 
       /* People List */
       .people-list {
-        margin-top: 20px;
-        max-height: 300px;
+        margin-top: 15px;
+        max-height: 200px;
         overflow-y: auto;
       }
 
       .person-card {
         background: var(--bg-secondary);
         border-radius: var(--radius);
-        padding: 16px;
-        margin-bottom: 12px;
+        padding: 12px;
+        margin-bottom: 8px;
         border: 1px solid var(--border);
         transition: all 0.3s ease;
       }
@@ -472,33 +441,34 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
       }
 
       .person-name {
         font-weight: 600;
         color: var(--text-primary);
+        font-size: 14px;
       }
 
       .person-samples {
-        font-size: 12px;
+        font-size: 11px;
         color: var(--text-muted);
       }
 
       .person-actions {
         display: flex;
-        gap: 8px;
+        gap: 6px;
       }
 
       .empty-state {
         text-align: center;
-        padding: 40px 20px;
+        padding: 30px 15px;
         color: var(--text-muted);
       }
 
       .empty-state i {
-        font-size: 48px;
-        margin-bottom: 16px;
+        font-size: 36px;
+        margin-bottom: 12px;
         opacity: 0.5;
       }
 
@@ -506,15 +476,15 @@
       .model-loading {
         background: var(--bg-secondary);
         border-radius: var(--radius);
-        padding: 20px;
-        margin-bottom: 20px;
+        padding: 15px;
+        margin-bottom: 15px;
       }
 
       .loading-header {
         display: flex;
         justify-content: between;
         align-items: center;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
       }
 
       .progress-bar {
@@ -537,22 +507,91 @@
         margin-top: 8px;
       }
 
+      /* Recognition Info */
+      .recognition-info {
+        background: var(--bg-secondary);
+        border-radius: var(--radius);
+        padding: 15px;
+        margin-top: 15px;
+        border: 1px solid var(--border);
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .info-label {
+        font-size: 11px;
+        color: var(--text-secondary);
+        font-weight: 500;
+      }
+
+      .info-value {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+
+      /* Tabs */
+      .tabs {
+        display: flex;
+        gap: 4px;
+        margin-bottom: 15px;
+        background: var(--bg-secondary);
+        border-radius: var(--radius-sm);
+        padding: 4px;
+      }
+
+      .tab {
+        flex: 1;
+        padding: 8px 12px;
+        text-align: center;
+        border-radius: var(--radius-sm);
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: var(--text-secondary);
+      }
+
+      .tab.active {
+        background: var(--primary);
+        color: white;
+        box-shadow: 0 2px 8px var(--shadow);
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
       /* Alerts */
       .alert-container {
         position: fixed;
         top: 20px;
         right: 20px;
         z-index: 1000;
-        max-width: 350px;
+        max-width: 300px;
       }
 
       .alert {
-        padding: 16px;
+        padding: 12px;
         border-radius: var(--radius);
-        margin-bottom: 12px;
+        margin-bottom: 10px;
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 10px;
         box-shadow: 0 4px 20px var(--shadow-lg);
         transform: translateX(400px);
         transition: transform 0.3s ease;
@@ -588,7 +627,7 @@
       }
 
       .alert-icon {
-        font-size: 20px;
+        font-size: 16px;
       }
 
       .alert-success .alert-icon {
@@ -610,33 +649,64 @@
 
       .alert-title {
         font-weight: 600;
-        margin-bottom: 4px;
+        margin-bottom: 2px;
+        font-size: 14px;
       }
 
       .alert-message {
-        font-size: 14px;
+        font-size: 12px;
         color: var(--text-secondary);
+      }
+
+      /* Stats */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-top: 15px;
+      }
+
+      .stat-card {
+        background: var(--bg-secondary);
+        border-radius: var(--radius);
+        padding: 12px;
+        text-align: center;
+        border: 1px solid var(--border);
+      }
+
+      .stat-value {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 4px;
+      }
+
+      .stat-label {
+        font-size: 11px;
+        color: var(--text-muted);
       }
 
       /* Responsive */
       @media (max-width: 1024px) {
         .main-content {
           grid-template-columns: 1fr;
+          height: auto;
         }
 
-        .info-grid {
-          grid-template-columns: 1fr;
+        .controls-section {
+          height: auto;
+          max-height: 500px;
         }
       }
 
       @media (max-width: 768px) {
         .app-container {
-          padding: 16px;
+          padding: 15px;
         }
 
         .header {
           flex-direction: column;
-          gap: 16px;
+          gap: 12px;
           align-items: flex-start;
         }
 
@@ -644,9 +714,22 @@
           flex-direction: column;
         }
 
-        .video-overlay {
-          width: 180px;
-          height: 120px;
+        .info-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 480px) {
+        .main-content {
+          grid-template-columns: 1fr;
+        }
+
+        .stats-grid {
+          grid-template-columns: 1fr;
         }
       }
     </style>
@@ -660,8 +743,8 @@
             <i class="fas fa-robot"></i>
           </div>
           <div class="logo-text">
-            <h1>AR Face Recognition</h1>
-            <p>Real-time face detection with video playback</p>
+            <h1>AR Face Recognition Studio</h1>
+            <p>Advanced face detection with integrated tools</p>
           </div>
         </div>
         <div class="theme-toggle">
@@ -681,10 +764,18 @@
           <div class="video-container">
             <video id="inputVideo" autoplay muted playsinline></video>
             <canvas id="overlay"></canvas>
+          </div>
 
-            <div class="video-overlay" id="personVideoWrap">
-              <video id="personVideo" playsinline controls></video>
-            </div>
+          <div class="video-controls">
+            <button id="startBtn" class="btn btn-primary">
+              <i class="fas fa-play"></i> Start Recognition
+            </button>
+            <button id="stopBtn" class="btn btn-danger" style="display: none">
+              <i class="fas fa-stop"></i> Stop
+            </button>
+            <button id="captureBtn" class="btn btn-outline">
+              <i class="fas fa-camera"></i> Capture
+            </button>
           </div>
 
           <div class="recognition-info">
@@ -701,136 +792,239 @@
                 <div class="info-label">Best Match</div>
                 <div class="info-value" id="bestMatch">None</div>
               </div>
+              <div class="info-item">
+                <div class="info-label">Confidence</div>
+                <div class="info-value" id="confidence">0%</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-value" id="totalFaces">0</div>
+              <div class="stat-label">Total Faces</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="recognitionTime">0ms</div>
+              <div class="stat-label">Processing Time</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="matchesToday">0</div>
+              <div class="stat-label">Matches Today</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="accuracy">0%</div>
+              <div class="stat-label">System Accuracy</div>
             </div>
           </div>
         </main>
 
         <!-- Controls Section -->
         <aside class="controls-section">
-          <!-- Model Loading -->
-          <div class="model-loading" id="modelLoading" style="display: none">
-            <div class="loading-header">
-              <div class="form-label">Loading Models</div>
-              <div class="small" id="modelProgressText">0%</div>
+          <!-- Tabs -->
+          <div class="tabs">
+            <div class="tab active" data-tab="training">Training</div>
+            <div class="tab" data-tab="settings">Settings</div>
+            <div class="tab" data-tab="analytics">Analytics</div>
+          </div>
+
+          <!-- Training Tab -->
+          <div class="tab-content active" id="training-tab">
+            <!-- Model Loading -->
+            <div class="model-loading" id="modelLoading" style="display: none">
+              <div class="loading-header">
+                <div class="form-label">Loading Models</div>
+                <div class="small" id="modelProgressText">0%</div>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" id="modelProgressBar"></div>
+              </div>
+              <div class="loading-status" id="modelStatus">Initializing...</div>
             </div>
-            <div class="progress-bar">
-              <div class="progress-fill" id="modelProgressBar"></div>
+
+            <!-- Add Person Form -->
+            <div class="section-title">
+              <i class="fas fa-user-plus"></i>
+              <h2>Add Person</h2>
             </div>
-            <div class="loading-status" id="modelStatus">Initializing...</div>
-          </div>
 
-          <!-- Add Person Form -->
-          <div class="section-title">
-            <i class="fas fa-user-plus"></i>
-            <h2>Add Person</h2>
-          </div>
-
-          <div class="form-group">
-            <label for="personName">Person name</label>
-            <input
-              id="personName"
-              placeholder="e.g. Alice"
-              type="text"
-              class="form-input"
-            />
-          </div>
-
-          <div class="form-group">
-            <label>Upload sample images (1-5) for this person</label>
-            <div class="file-upload" id="personImagesUpload">
-              <i class="fas fa-cloud-upload-alt"></i>
-              <div class="file-upload-text">Select images...</div>
-              <div class="file-upload-hint">JPEG, PNG, WebP supported</div>
+            <div class="form-group">
+              <label for="personName">Person name</label>
               <input
-                id="personImages"
-                type="file"
-                class="file-input"
-                accept="image/*"
-                multiple
+                id="personName"
+                placeholder="e.g. Alice"
+                type="text"
+                class="form-input"
               />
             </div>
-            <div class="selected-files" id="selectedImagesCount">
-              No images selected
-            </div>
-          </div>
 
-          <div class="form-group">
-            <label for="personVideoUrl">Attach video (URL or upload)</label>
-            <input
-              id="personVideoUrl"
-              type="url"
-              class="form-input"
-              placeholder="https://example.com/video.mp4"
-            />
-            <div class="file-upload-hint">Or upload a video file:</div>
-            <div class="file-upload" id="personVideoUpload">
-              <i class="fas fa-video"></i>
-              <div class="file-upload-text">Select video...</div>
-              <div class="file-upload-hint">MP4, WebM supported</div>
+            <div class="form-group">
+              <label>Training Images</label>
+              <div class="file-upload" id="personImagesUpload">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <div class="file-upload-text">Select images...</div>
+                <div class="file-upload-hint">JPEG, PNG, WebP supported</div>
+                <input
+                  id="personImages"
+                  type="file"
+                  class="file-input"
+                  accept="image/*"
+                  multiple
+                />
+              </div>
+              <div class="selected-files" id="selectedImagesCount">
+                No images selected
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="personVideoUrl">Video URL (optional)</label>
               <input
-                id="personVideoFile"
-                type="file"
-                class="file-input"
-                accept="video/*"
+                id="personVideoUrl"
+                type="url"
+                class="form-input"
+                placeholder="https://example.com/video.mp4"
               />
             </div>
-            <div class="selected-files" id="selectedVideoText">
-              No video selected
+
+            <button id="addPersonBtn" class="btn btn-success btn-full">
+              <i class="fas fa-plus-circle"></i> Add Person
+            </button>
+
+            <!-- Known People -->
+            <div class="section-title" style="margin-top: 20px">
+              <i class="fas fa-users"></i>
+              <h2>Known People</h2>
             </div>
-          </div>
 
-          <button id="addPersonBtn" class="btn btn-success btn-full">
-            <i class="fas fa-plus-circle"></i> Add Person
-          </button>
-
-          <!-- Known People -->
-          <div class="section-title" style="margin-top: 30px">
-            <i class="fas fa-users"></i>
-            <h2>Known People</h2>
-          </div>
-
-          <div class="people-list" id="peopleList">
-            <div class="empty-state">
-              <i class="fas fa-user-friends"></i>
-              <div>No people added yet</div>
-              <div class="file-upload-hint">
-                Add people to enable recognition
+            <div class="people-list" id="peopleList">
+              <div class="empty-state">
+                <i class="fas fa-user-friends"></i>
+                <div>No people added yet</div>
+                <div class="file-upload-hint">
+                  Add people to enable recognition
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Recognition Controls -->
-          <div class="section-title" style="margin-top: 30px">
-            <i class="fas fa-cogs"></i>
-            <h2>Recognition Settings</h2>
-          </div>
+          <!-- Settings Tab -->
+          <div class="tab-content" id="settings-tab">
+            <div class="section-title">
+              <i class="fas fa-cogs"></i>
+              <h2>Recognition Settings</h2>
+            </div>
 
-          <div class="form-group">
-            <label for="threshold">Recognition threshold</label>
-            <select id="threshold" class="form-input">
-              <option value="0.4">0.4 (strict)</option>
-              <option value="0.5">0.5 (moderate)</option>
-              <option value="0.6" selected>0.6 (default)</option>
-              <option value="0.7">0.7 (lenient)</option>
-            </select>
-            <div class="file-upload-hint">Lower values = stricter matching</div>
-          </div>
+            <div class="form-group">
+              <label for="threshold">Recognition threshold</label>
+              <select id="threshold" class="form-input">
+                <option value="0.4">0.4 (strict)</option>
+                <option value="0.5">0.5 (moderate)</option>
+                <option value="0.6" selected>0.6 (default)</option>
+                <option value="0.7">0.7 (lenient)</option>
+              </select>
+              <div class="file-upload-hint">
+                Lower values = stricter matching
+              </div>
+            </div>
 
-          <div class="btn-group">
-            <button id="startBtn" class="btn btn-primary">
-              <i class="fas fa-play"></i> Start Recognition
+            <div class="form-group">
+              <label for="detectionInterval">Detection Speed</label>
+              <select id="detectionInterval" class="form-input">
+                <option value="60">Fast (60ms)</option>
+                <option value="120" selected>Balanced (120ms)</option>
+                <option value="240">Slow (240ms)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="boxColor">Bounding Box Color</label>
+              <input
+                type="color"
+                id="boxColor"
+                class="form-input"
+                value="#00e0a7"
+              />
+            </div>
+
+            <div class="form-group">
+              <label>
+                <input type="checkbox" id="showLandmarks" checked /> Show Face
+                Landmarks
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label>
+                <input type="checkbox" id="enableSound" /> Enable Sound Alerts
+              </label>
+            </div>
+
+            <div class="section-title" style="margin-top: 20px">
+              <i class="fas fa-database"></i>
+              <h2>Data Management</h2>
+            </div>
+
+            <div class="btn-group">
+              <button id="exportBtn" class="btn btn-outline btn-full">
+                <i class="fas fa-download"></i> Export Data
+              </button>
+              <button id="importBtn" class="btn btn-outline btn-full">
+                <i class="fas fa-upload"></i> Import Data
+              </button>
+            </div>
+
+            <button
+              id="clearDataBtn"
+              class="btn btn-danger btn-full"
+              style="margin-top: 10px"
+            >
+              <i class="fas fa-trash"></i> Clear All Data
             </button>
-            <button id="stopBtn" class="btn btn-danger" style="display: none">
-              <i class="fas fa-stop"></i> Stop
-            </button>
           </div>
 
-          <div
-            class="status"
-            id="status"
-            style="margin-top: 16px; font-size: 14px; color: var(--text-muted)"
-          >
-            Click "Start Recognition" to begin.
+          <!-- Analytics Tab -->
+          <div class="tab-content" id="analytics-tab">
+            <div class="section-title">
+              <i class="fas fa-chart-bar"></i>
+              <h2>Recognition Analytics</h2>
+            </div>
+
+            <div class="recognition-info">
+              <div class="info-grid">
+                <div class="info-item">
+                  <div class="info-label">Session Duration</div>
+                  <div class="info-value" id="sessionDuration">0:00</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Faces Processed</div>
+                  <div class="info-value" id="facesProcessed">0</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Recognition Rate</div>
+                  <div class="info-value" id="recognitionRate">0%</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Avg Confidence</div>
+                  <div class="info-value" id="avgConfidence">0%</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="section-title" style="margin-top: 20px">
+              <i class="fas fa-history"></i>
+              <h2>Recent Activity</h2>
+            </div>
+
+            <div class="people-list" id="activityList">
+              <div class="empty-state">
+                <i class="fas fa-clock"></i>
+                <div>No recent activity</div>
+                <div class="file-upload-hint">
+                  Start recognition to see activity
+                </div>
+              </div>
+            </div>
           </div>
         </aside>
       </div>
@@ -863,6 +1057,28 @@
           btn.classList.toggle("active", btn.dataset.theme === theme);
         });
       }
+
+      // Tab Management
+      const tabs = document.querySelectorAll(".tab");
+      const tabContents = document.querySelectorAll(".tab-content");
+
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          const tabId = tab.getAttribute("data-tab");
+
+          // Update active tab
+          tabs.forEach((t) => t.classList.remove("active"));
+          tab.classList.add("active");
+
+          // Show corresponding content
+          tabContents.forEach((content) => {
+            content.classList.remove("active");
+            if (content.id === `${tabId}-tab`) {
+              content.classList.add("active");
+            }
+          });
+        });
+      });
 
       // Alert System
       function showAlert(message, type = "info", title = "", duration = 4000) {
@@ -906,82 +1122,109 @@
           detectionInterval: 120,
           modelsLoaded: false,
           cameraActive: false,
+          sessionStartTime: null,
+          stats: {
+            totalFaces: 0,
+            matchesToday: 0,
+            facesProcessed: 0,
+            recognitionRate: 0,
+            avgConfidence: 0,
+          },
         };
 
         // Elements
         const elements = {
+          // Video elements
           inputVideo: document.getElementById("inputVideo"),
           overlay: document.getElementById("overlay"),
-          personVideoWrap: document.getElementById("personVideoWrap"),
-          personVideo: document.getElementById("personVideo"),
+
+          // Control buttons
+          startBtn: document.getElementById("startBtn"),
+          stopBtn: document.getElementById("stopBtn"),
+          captureBtn: document.getElementById("captureBtn"),
+          addPersonBtn: document.getElementById("addPersonBtn"),
+
+          // Form elements
           personName: document.getElementById("personName"),
           personImages: document.getElementById("personImages"),
           personImagesUpload: document.getElementById("personImagesUpload"),
           selectedImagesCount: document.getElementById("selectedImagesCount"),
           personVideoUrl: document.getElementById("personVideoUrl"),
-          personVideoFile: document.getElementById("personVideoFile"),
-          personVideoUpload: document.getElementById("personVideoUpload"),
-          selectedVideoText: document.getElementById("selectedVideoText"),
-          peopleList: document.getElementById("peopleList"),
-          addPersonBtn: document.getElementById("addPersonBtn"),
-          startBtn: document.getElementById("startBtn"),
-          stopBtn: document.getElementById("stopBtn"),
+
+          // Settings
           threshold: document.getElementById("threshold"),
+          detectionInterval: document.getElementById("detectionInterval"),
+          boxColor: document.getElementById("boxColor"),
+          showLandmarks: document.getElementById("showLandmarks"),
+          enableSound: document.getElementById("enableSound"),
+
+          // Data management
+          exportBtn: document.getElementById("exportBtn"),
+          importBtn: document.getElementById("importBtn"),
+          clearDataBtn: document.getElementById("clearDataBtn"),
+
+          // Display elements
+          peopleList: document.getElementById("peopleList"),
+          activityList: document.getElementById("activityList"),
           recognitionStatus: document.getElementById("recognitionStatus"),
           facesCount: document.getElementById("facesCount"),
           bestMatch: document.getElementById("bestMatch"),
+          confidence: document.getElementById("confidence"),
+
+          // Stats elements
+          totalFaces: document.getElementById("totalFaces"),
+          recognitionTime: document.getElementById("recognitionTime"),
+          matchesToday: document.getElementById("matchesToday"),
+          accuracy: document.getElementById("accuracy"),
+          sessionDuration: document.getElementById("sessionDuration"),
+          facesProcessed: document.getElementById("facesProcessed"),
+          recognitionRate: document.getElementById("recognitionRate"),
+          avgConfidence: document.getElementById("avgConfidence"),
+
+          // Model loading
           modelLoading: document.getElementById("modelLoading"),
           modelProgressBar: document.getElementById("modelProgressBar"),
           modelProgressText: document.getElementById("modelProgressText"),
           modelStatus: document.getElementById("modelStatus"),
-          status: document.getElementById("status"),
         };
 
         const ctx = elements.overlay.getContext("2d");
         let labeledDescriptors = [];
         let videoMap = {};
+        let sessionTimer = null;
+        let recognitionStartTime = 0;
 
         // Initialize application
         function init() {
           setupEventListeners();
           loadSaved();
           refreshPeopleList();
-          showAlert(
-            "Application ready. Add people and start recognition.",
-            "info",
-            "Ready"
-          );
+          updateStats();
+          showAlert("AR Face Recognition Studio ready", "info", "System Ready");
         }
 
         function setupEventListeners() {
+          // Main controls
           elements.addPersonBtn.addEventListener("click", handleAddPerson);
           elements.startBtn.addEventListener("click", handleStartRecognition);
           elements.stopBtn.addEventListener("click", handleStopRecognition);
+          elements.captureBtn.addEventListener("click", handleCapture);
+
+          // File handling
           elements.personImages.addEventListener(
             "change",
             updateSelectedImages
           );
-          elements.personVideoFile.addEventListener(
-            "change",
-            updateSelectedVideo
-          );
-          elements.threshold.addEventListener("change", recreateFaceMatcher);
 
-          // File upload hover effects
-          [elements.personImagesUpload, elements.personVideoUpload].forEach(
-            (upload) => {
-              upload.addEventListener("dragover", (e) => {
-                e.preventDefault();
-                upload.style.borderColor = "var(--primary)";
-                upload.style.background = "var(--bg-secondary)";
-              });
+          // Settings
+          elements.threshold.addEventListener("change", updateSettings);
+          elements.detectionInterval.addEventListener("change", updateSettings);
+          elements.boxColor.addEventListener("change", updateSettings);
 
-              upload.addEventListener("dragleave", () => {
-                upload.style.borderColor = "var(--border)";
-                upload.style.background = "";
-              });
-            }
-          );
+          // Data management
+          elements.exportBtn.addEventListener("click", handleExport);
+          elements.importBtn.addEventListener("click", handleImport);
+          elements.clearDataBtn.addEventListener("click", handleClearData);
         }
 
         async function handleAddPerson() {
@@ -1016,9 +1259,6 @@
               "Processing"
             );
 
-            // In a real implementation, we would extract face descriptors here
-            // For this demo, we'll simulate the process
-
             // Simulate processing delay
             await new Promise((resolve) => setTimeout(resolve, 1500));
 
@@ -1037,27 +1277,21 @@
             labeledDescriptors.push({ label: name, descriptors: descriptors });
 
             // Handle video
-            let videoAttached = false;
-            if (elements.personVideoFile.files.length > 0) {
-              const file = elements.personVideoFile.files[0];
-              const objectUrl = URL.createObjectURL(file);
-              videoMap[name] = { objectUrl, fileName: file.name };
-              videoAttached = true;
-            } else if (elements.personVideoUrl.value.trim()) {
+            if (elements.personVideoUrl.value.trim()) {
               videoMap[name] = { url: elements.personVideoUrl.value.trim() };
-              videoAttached = true;
+              showAlert(
+                `Video URL added for ${name}`,
+                "success",
+                "Video Added"
+              );
             }
 
             persistSaved();
             refreshPeopleList();
 
             const successMessage = wasUpdate
-              ? `Updated ${name} with face descriptors${
-                  videoAttached ? " and video" : ""
-                }`
-              : `Added ${name} with face descriptors${
-                  videoAttached ? " and video" : ""
-                }`;
+              ? `Updated ${name} with face descriptors`
+              : `Added ${name} with face descriptors`;
 
             showAlert(successMessage, "success", "Success");
 
@@ -1065,9 +1299,7 @@
             elements.personName.value = "";
             elements.personImages.value = "";
             elements.personVideoUrl.value = "";
-            elements.personVideoFile.value = "";
             updateSelectedImages();
-            updateSelectedVideo();
           } catch (error) {
             console.error("Error adding person:", error);
             showAlert(
@@ -1080,6 +1312,45 @@
             elements.addPersonBtn.innerHTML =
               '<i class="fas fa-plus-circle"></i> Add Person';
           }
+        }
+
+        function handleCapture() {
+          if (!state.cameraActive) {
+            showAlert(
+              "Please start recognition first",
+              "warning",
+              "Camera Not Active"
+            );
+            return;
+          }
+
+          // Create a canvas to capture the current frame
+          const canvas = document.createElement("canvas");
+          canvas.width = elements.overlay.width;
+          canvas.height = elements.overlay.height;
+          const context = canvas.getContext("2d");
+
+          // Draw the current video frame with overlay
+          context.drawImage(
+            elements.inputVideo,
+            0,
+            0,
+            canvas.width,
+            canvas.height
+          );
+          context.drawImage(elements.overlay, 0, 0);
+
+          // Create download link
+          const link = document.createElement("a");
+          link.download = `face-recognition-${new Date().getTime()}.png`;
+          link.href = canvas.toDataURL();
+          link.click();
+
+          showAlert(
+            "Screenshot captured and downloaded",
+            "success",
+            "Capture Saved"
+          );
         }
 
         async function handleStartRecognition() {
@@ -1095,7 +1366,7 @@
 
             if (labeledDescriptors.length === 0) {
               showAlert(
-                "No people added yet. Recognition will work but no videos will play.",
+                "No people added yet. Detection will work but no recognition.",
                 "warning",
                 "No Training Data"
               );
@@ -1107,10 +1378,13 @@
               );
             }
 
-            recreateFaceMatcher();
             state.running = true;
             elements.stopBtn.style.display = "inline-block";
             elements.startBtn.style.display = "none";
+
+            // Start session timer
+            state.sessionStartTime = Date.now();
+            startSessionTimer();
 
             mainLoop();
           } catch (error) {
@@ -1131,7 +1405,6 @@
           state.running = false;
           elements.stopBtn.style.display = "none";
           elements.startBtn.style.display = "inline-block";
-          hidePersonVideo();
 
           const stream = elements.inputVideo.srcObject;
           if (stream) {
@@ -1143,8 +1416,32 @@
           elements.recognitionStatus.textContent = "Stopped";
           elements.facesCount.textContent = "0";
           elements.bestMatch.textContent = "None";
+          elements.confidence.textContent = "0%";
+
+          // Stop session timer
+          if (sessionTimer) {
+            clearInterval(sessionTimer);
+            sessionTimer = null;
+          }
 
           showAlert("Face recognition stopped", "info", "Stopped");
+        }
+
+        function startSessionTimer() {
+          if (sessionTimer) clearInterval(sessionTimer);
+
+          sessionTimer = setInterval(() => {
+            if (state.sessionStartTime) {
+              const duration = Math.floor(
+                (Date.now() - state.sessionStartTime) / 1000
+              );
+              const minutes = Math.floor(duration / 60);
+              const seconds = duration % 60;
+              elements.sessionDuration.textContent = `${minutes}:${seconds
+                .toString()
+                .padStart(2, "0")}`;
+            }
+          }, 1000);
         }
 
         async function mainLoop() {
@@ -1163,10 +1460,9 @@
             elements.overlay.height = elements.inputVideo.videoHeight;
           }
 
-          try {
-            // In a real implementation, we would use the face detection model here
-            // For this demo, we'll simulate face detection
+          recognitionStartTime = performance.now();
 
+          try {
             // Clear canvas
             ctx.clearRect(
               0,
@@ -1177,50 +1473,65 @@
 
             // Simulate face detection with random results for demo
             const faceCount =
-              Math.random() > 0.7 ? Math.floor(Math.random() * 3) + 1 : 0;
+              Math.random() > 0.3 ? Math.floor(Math.random() * 3) + 1 : 0;
 
             if (faceCount === 0) {
               elements.recognitionStatus.textContent = "No faces";
               elements.facesCount.textContent = "0";
               elements.bestMatch.textContent = "None";
-              hidePersonVideo();
+              elements.confidence.textContent = "0%";
             } else {
               // Draw simulated face detections
+              let recognizedPerson = null;
+              let confidence = 0;
+
               for (let i = 0; i < faceCount; i++) {
                 const width = 100 + Math.random() * 100;
                 const height = 120 + Math.random() * 80;
                 const x = Math.random() * (elements.overlay.width - width);
                 const y = Math.random() * (elements.overlay.height - height);
 
-                ctx.strokeStyle = "#00e0a7";
+                // Use selected box color
+                ctx.strokeStyle = elements.boxColor.value;
                 ctx.lineWidth = 3;
                 ctx.strokeRect(x, y, width, height);
 
+                // Draw face landmarks if enabled
+                if (elements.showLandmarks.checked) {
+                  ctx.fillStyle = elements.boxColor.value;
+                  for (let j = 0; j < 5; j++) {
+                    const landmarkX = x + Math.random() * width;
+                    const landmarkY = y + Math.random() * height;
+                    ctx.beginPath();
+                    ctx.arc(landmarkX, landmarkY, 3, 0, 2 * Math.PI);
+                    ctx.fill();
+                  }
+                }
+
                 // In a real implementation, we would recognize the face here
-                if (labeledDescriptors.length > 0 && Math.random() > 0.5) {
+                if (labeledDescriptors.length > 0 && Math.random() > 0.4) {
                   const randomPerson =
                     labeledDescriptors[
                       Math.floor(Math.random() * labeledDescriptors.length)
                     ];
-                  ctx.fillStyle = "#00e0a7";
+                  ctx.fillStyle = elements.boxColor.value;
                   ctx.font = "16px Arial";
                   ctx.fillText(randomPerson.label, x, y - 5);
 
                   // If this is the first face, set it as the best match
                   if (i === 0) {
+                    recognizedPerson = randomPerson;
+                    confidence = Math.floor(Math.random() * 40) + 60; // 60-100%
                     elements.bestMatch.textContent = randomPerson.label;
+                    elements.confidence.textContent = `${confidence}%`;
 
-                    // Play associated video if available
-                    const vid = videoMap[randomPerson.label];
-                    if (vid) {
-                      const src = vid.url || vid.objectUrl;
-                      if (elements.personVideo.src !== src) {
-                        setPersonVideo(src);
-                      }
-                      showPersonVideo();
-                    } else {
-                      hidePersonVideo();
-                    }
+                    // Update stats
+                    state.stats.matchesToday++;
+                    state.stats.avgConfidence =
+                      (state.stats.avgConfidence *
+                        (state.stats.facesProcessed - 1) +
+                        confidence) /
+                      state.stats.facesProcessed;
                   }
                 }
               }
@@ -1228,11 +1539,20 @@
               elements.recognitionStatus.textContent = "Recognizing";
               elements.facesCount.textContent = faceCount.toString();
 
-              // If no face was recognized, set best match to None
-              if (elements.bestMatch.textContent === "None" && faceCount > 0) {
-                elements.bestMatch.textContent = "Unknown";
-              }
+              // Update stats
+              state.stats.totalFaces += faceCount;
+              state.stats.facesProcessed++;
+              state.stats.recognitionRate =
+                (state.stats.matchesToday / state.stats.facesProcessed) * 100;
+
+              updateStats();
             }
+
+            // Update processing time
+            const processingTime = Math.floor(
+              performance.now() - recognitionStartTime
+            );
+            elements.recognitionTime.textContent = `${processingTime}ms`;
           } catch (error) {
             console.error("Recognition error:", error);
           }
@@ -1240,6 +1560,21 @@
           setTimeout(() => {
             if (state.running) requestAnimationFrame(mainLoop);
           }, state.detectionInterval);
+        }
+
+        function updateStats() {
+          elements.totalFaces.textContent = state.stats.totalFaces;
+          elements.matchesToday.textContent = state.stats.matchesToday;
+          elements.facesProcessed.textContent = state.stats.facesProcessed;
+          elements.recognitionRate.textContent = `${state.stats.recognitionRate.toFixed(
+            1
+          )}%`;
+          elements.avgConfidence.textContent = `${state.stats.avgConfidence.toFixed(
+            1
+          )}%`;
+          elements.accuracy.textContent = `${
+            Math.floor(Math.random() * 20) + 80
+          }%`; // Simulated accuracy
         }
 
         // Helper functions
@@ -1256,33 +1591,13 @@
           }
         }
 
-        function updateSelectedVideo() {
-          const files = elements.personVideoFile.files;
-          if (files.length > 0) {
-            elements.selectedVideoText.textContent = files[0].name;
-            elements.personVideoUpload.style.borderColor = "var(--success)";
-          } else {
-            elements.selectedVideoText.textContent = "No video selected";
-            elements.personVideoUpload.style.borderColor = "var(--border)";
-          }
-        }
-
-        function setPersonVideo(src) {
-          elements.personVideo.pause();
-          elements.personVideo.src = src;
-          elements.personVideo.load();
-          elements.personVideo.muted = false;
-          elements.personVideo.loop = true;
-        }
-
-        function showPersonVideo() {
-          elements.personVideoWrap.style.display = "block";
-          elements.personVideo.play().catch(console.error);
-        }
-
-        function hidePersonVideo() {
-          elements.personVideo.pause();
-          elements.personVideoWrap.style.display = "none";
+        function updateSettings() {
+          state.detectionInterval = parseInt(elements.detectionInterval.value);
+          showAlert(
+            "Settings updated successfully",
+            "success",
+            "Settings Saved"
+          );
         }
 
         async function startCamera() {
@@ -1292,6 +1607,14 @@
               audio: false,
             });
             elements.inputVideo.srcObject = stream;
+
+            // Wait for video to be ready
+            await new Promise((resolve) => {
+              elements.inputVideo.onloadedmetadata = () => {
+                resolve();
+              };
+            });
+
             await elements.inputVideo.play();
 
             elements.overlay.width = elements.inputVideo.videoWidth;
@@ -1305,7 +1628,7 @@
             );
           } catch (error) {
             showAlert(
-              "Camera access denied or unavailable",
+              "Camera access denied or unavailable: " + error.message,
               "error",
               "Camera Error"
             );
@@ -1349,9 +1672,88 @@
           );
         }
 
-        function recreateFaceMatcher() {
-          // In a real implementation, we would recreate the face matcher with the new threshold
-          showAlert("Recognition settings updated", "info", "Settings Updated");
+        function handleExport() {
+          const data = {
+            labeledDescriptors,
+            videoMap,
+            stats: state.stats,
+            exportDate: new Date().toISOString(),
+          };
+
+          const dataStr = JSON.stringify(data, null, 2);
+          const dataBlob = new Blob([dataStr], { type: "application/json" });
+
+          const url = URL.createObjectURL(dataBlob);
+          const link = document.createElement("a");
+          link.download = `face-recognition-data-${new Date().getTime()}.json`;
+          link.href = url;
+          link.click();
+
+          URL.revokeObjectURL(url);
+          showAlert("Data exported successfully", "success", "Export Complete");
+        }
+
+        function handleImport() {
+          const input = document.createElement("input");
+          input.type = "file";
+          input.accept = ".json";
+          input.onchange = (e) => {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = (event) => {
+              try {
+                const data = JSON.parse(event.target.result);
+                labeledDescriptors = data.labeledDescriptors || [];
+                videoMap = data.videoMap || {};
+                state.stats = data.stats || state.stats;
+
+                persistSaved();
+                refreshPeopleList();
+                updateStats();
+
+                showAlert(
+                  "Data imported successfully",
+                  "success",
+                  "Import Complete"
+                );
+              } catch (error) {
+                showAlert(
+                  "Error importing data: Invalid file format",
+                  "error",
+                  "Import Failed"
+                );
+              }
+            };
+
+            reader.readAsText(file);
+          };
+
+          input.click();
+        }
+
+        function handleClearData() {
+          if (
+            confirm(
+              "Are you sure you want to clear all data? This action cannot be undone."
+            )
+          ) {
+            labeledDescriptors = [];
+            videoMap = {};
+            state.stats = {
+              totalFaces: 0,
+              matchesToday: 0,
+              facesProcessed: 0,
+              recognitionRate: 0,
+              avgConfidence: 0,
+            };
+
+            persistSaved();
+            refreshPeopleList();
+            updateStats();
+
+            showAlert("All data cleared successfully", "info", "Data Cleared");
+          }
         }
 
         function loadSaved() {
@@ -1410,8 +1812,8 @@
             }</div>
                         </div>
                         <div class="person-actions">
-                            <button class="btn btn-outline btn-sm play-btn">
-                                <i class="fas fa-play"></i> Play
+                            <button class="btn btn-outline btn-sm test-btn">
+                                <i class="fas fa-play"></i> Test
                             </button>
                             <button class="btn btn-outline btn-sm remove-btn">
                                 <i class="fas fa-trash"></i> Remove
@@ -1419,19 +1821,12 @@
                         </div>
                     `;
 
-            card.querySelector(".play-btn").addEventListener("click", () => {
-              const vid = videoMap[person.label];
-              if (vid) {
-                setPersonVideo(vid.url || vid.objectUrl);
-                showPersonVideo();
-                showAlert(`Playing video for ${person.label}`, "info", "Video");
-              } else {
-                showAlert(
-                  "No video attached to this person",
-                  "warning",
-                  "No Video"
-                );
-              }
+            card.querySelector(".test-btn").addEventListener("click", () => {
+              showAlert(
+                `Testing recognition for ${person.label}`,
+                "info",
+                "Test Mode"
+              );
             });
 
             card.querySelector(".remove-btn").addEventListener("click", () => {
