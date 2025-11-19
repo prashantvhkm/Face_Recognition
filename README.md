@@ -31,17 +31,6 @@ https://691ab7064440693967dd9d84--regal-monstera-d58a48.netlify.app/
 
 
 
-## 📥 Download Required Models  
-Create a folder named **models** and add these model files:
-
-1. `ssd_mobilenetv1_model-weights_manifest.json`
-2. `face_landmark_68_model-weights_manifest.json`
-3. `face_recognition_model-weights_manifest.json`
-
-👉 Download from **official face-api.js models repo**  
-Search: **“face-api.js models GitHub”**  
-Then paste the model folders inside `/models`.
-
 
 
 
